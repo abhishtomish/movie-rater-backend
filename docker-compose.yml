@@ -1,0 +1,28 @@
+version: '2.0'
+
+services:
+  db:
+    image: sqllite3
+  webservice:
+    build: .
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8889"
+    container_name: poneacallcenter
+    volumes:
+      - .:/poneacallcenter
+    ports:
+      - "8889:8889"
+    depends_on:
+      - db
+
+  # frontend:
+  #   container_name: frontend
+  #   build: 
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - '.:/usr/src/app'
+  #     - '/usr/src/app/node_modules'
+  #   ports:
+  #     - '3009:3009'
+  #   environment:
+  #     - NODE_ENV=development
