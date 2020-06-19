@@ -5,7 +5,7 @@ ARG ENV=dev
 
 RUN mkdir /app
 WORKDIR /app
-ADD requirements.txt /app/requirements
+ADD requirements.txt /app/requirements.txt
 
 # Install the pip requirements file depending on 
 # the $ENV build arg passed in when starting build.
