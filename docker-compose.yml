@@ -1,21 +1,28 @@
-version: '3'
+version: '2.0'
 
 services:
-
-  app:
-      build: .
-      restart: always
-      env_file:
-          - .env
-      ports:
-          - "8000:8000"
-      volumes:
-          - "/app/"
-      command: bash -c "python manage.py migrate --no-input &&
-                                      python manage.py runserver 0.0.0.0:8000"
-
   db:
-      image: postgres:9.6
-      restart: always
-      volumes:
-          - "./volumes/db:/var/lib/postgresql/data"
+    image: postgres
+  webservice:
+    build: .
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8889"
+    container_name: movierater
+    volumes:
+      - .:/movierater
+    ports:
+      - "8889:8889"
+    depends_on:
+      - db
+
+  # frontend:
+  #   container_name: frontend
+  #   build: 
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - '.:/usr/src/app'
+  #     - '/usr/src/app/node_modules'
+  #   ports:
+  #     - '3009:3009'
+  #   environment:
+  #     - NODE_ENV=development
