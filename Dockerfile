@@ -1,21 +1,13 @@
-# The base image we want to inherit from
-FROM python:3.7
-ENV PYTHONUNBUFFERED 1
-ARG ENV=dev
 
-RUN mkdir /app
-# WORKDIR /app
-# ADD ./requirements /app/requirements
-# COPY requirements.txt /app
+# Install Python
+FROM python:latest as api
+RUN apt-get update && apt-get install -y swig && apt-get install -y --no-install-recommends nano sudo iputils-ping && rm -rf /var/lib/apt/lists/*
 
-# Install the pip requirements file depending on 
-# the $ENV build arg passed in when starting build.
-RUN pip install requirements.txt
-
-# Copy the rest of our application.
-COPY . /app/
-
-# Expose the application on port 8000
-EXPOSE 8000
-# Run test server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Create folder code and copy all files
+RUN mkdir /home/movierater
+ADD requirements.txt /home/movierater
+ADD . /home/movierater
+WORKDIR /home/movierater
+RUN ls -al
+# Install Python
+RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
