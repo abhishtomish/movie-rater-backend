@@ -1,32 +1,10 @@
 version: '3'
 
 services:
-  db:
-    image: postgres
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-  webservice:
+  web:
     build: .
-    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8889"
-    container_name: movierater
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/movierater
+      - .:/app
     ports:
-      - "8889:8889"
-    depends_on:
-      - db
-
-  # frontend:
-  #   container_name: frontend
-  #   build: 
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - '.:/usr/src/app'
-  #     - '/usr/src/app/node_modules'
-  #   ports:
-  #     - '3009:3009'
-  #   environment:
-  #     - NODE_ENV=development
+      - "8000:8000"
